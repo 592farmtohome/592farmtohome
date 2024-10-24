@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm to Home - Unifying Agriculture, Globally</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f7f4;
+            color: #333;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        header {
+            background: #70c1b3;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 2.5rem;
+        }
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        .market-data, .user-actions, .supply-demand {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .market-data:hover, .user-actions:hover, .supply-demand:hover {
+            transform: translateY(-5px);
+        }
+        .market-data {
+            flex: 2 1 300px;
+            margin-right: 1.5rem;
+        }
+        .user-actions, .supply-demand {
+            flex: 1 1 200px;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+        }
+        th {
+            background-color: #70c1b3;
+            color: white;
+            border-radius: 5px;
+        }
+        tr {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        tr:hover {
+            background-color: #e9e9e9;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #247ba0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.1s ease;
+        }
+        button:hover {
+            background: #1d6285;
+            transform: scale(1.05);
+        }
+        .chart {
+            width: 100%;
+            height: 200px;
+            background: #e9e9e9;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .international-markets {
+            margin-top: 20px;
+        }
+        .international-markets select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .logo img {
+            width: 80px;
+            height: auto;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .product-item, .trend-item, .market-item {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .product-item:hover, .trend-item:hover, .market-item:hover {
+            background-color: #e9e9e9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Farm to Home - Consolidated Agricultural Market Platform</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="market-data">
+                <h2>Current Market Prices</h2>
+                <table>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price (per unit)</th>
+                        <th>Supply</th>
+                        <th>Demand</th>
+                    </tr>
+                    <tr>
+                        <td>Wheat</td>
+                        <td>GYD <span id="wheat-price">0.00</span></td>
+                        <td><span id="wheat-supply">0</span> tons</td>
+                        <td><span id="wheat-demand">0</span> tons</td>
+                    </tr>
+                    <tr>
+                        <td>Sugar</td>
+                        <td>GYD <span id="sugar-price">0.00</span></td>
+                        <td><span id="sugar-supply">0</span> tons</td>
+                        <td><span id="sugar-demand">0</span> tons</td>
+                    </tr>
+                    <tr>
+                        <td>Rice</td>
+                        <td>GYD <span id="rice-price">0.00</span></td>
+                        <td><span id="rice-supply">0</span> tons</td>
+                        <td><span id="rice-demand">0</span> tons</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="user-actions">
+                <h2>Market Actions</h2>
+                <button id="login-btn">Login</button>
+                <button id="buy-btn" disabled>Buy Products</button>
+                <button id="sell-btn" disabled>Sell Products</button>
+                <button id="view-trends-btn" disabled>View Market Trends</button>
+                <button id="international-markets-btn" disabled>Access International Markets</button>
+                <button id="ai-assist-btn" disabled>AI Assistance</button>
+                <button id="profile-btn" style="display: none;">View Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log("Script is running"); // Add this line to check if the script is running
+
+        let isLoggedIn = false;
+        let currentUser = null;
+
+        function enableButtons() {
+            const buttons = ['buy-btn', 'sell-btn', 'view-trends-btn', 'international-markets-btn', 'ai-assist-btn', 'profile-btn'];
+            buttons.forEach(btn => {
+                document.getElementById(btn).disabled = false;
+            });
+        }
+
+        document.getElementById('login-btn').addEventListener('click', () => {
+            if (isLoggedIn) {
+                // Logout functionality
+                isLoggedIn = false;
+                currentUser = null;
+                document.getElementById('login-btn').textContent = 'Login';
+                document.getElementById('profile-btn').style.display = 'none';
+                disableButtons();
+            } else {
+                // Login functionality
+                const width = 500;
+                const height = 600;
+                const left = (screen.width / 2) - (width / 2);
+                const top = (screen.height / 2) - (height / 2);
+                const loginWindow = window.open('login.html', 'Login', `width=${width},height=${height},left=${left},top=${top}`);
+
+                window.addEventListener('message', (event) => {
+                    if (event.data.status === 'login-success') {
+                        isLoggedIn = true;
+                        currentUser = {
+                            username: event.data.username,
+                            userType: event.data.userType
+                        };
+                        enableButtons();
+                        document.getElementById('login-btn').textContent = 'Logout';
+                        document.getElementById('profile-btn').style.display = 'block';
+                        alert(`Welcome, ${currentUser.username}!`);
+                    }
+                });
+            }
+        });
+
+        // Simulated dynamic price allocation system
+        function updateMarketData() {
+            const products = ['wheat', 'sugar', 'rice'];
+            products.forEach(product => {
+                const price = (Math.random() * 1000 + 200).toFixed(2); // Adjusted for GYD
+                const supply = Math.floor(Math.random() * 1000) + 100;
+                const demand = Math.floor(Math.random() * 1000) + 100;
+                
+                document.getElementById(`${product}-price`).textContent = price;
+                document.getElementById(`${product}-supply`).textContent = supply;
+                document.getElementById(`${product}-demand`).textContent = demand;
+            });
+        }
+
+        // Update market data every 5 seconds
+        setInterval(updateMarketData, 5000);
+
+        // Initial update
+        updateMarketData();
+
+        // Modal functionality
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.className === "modal") {
+                event.target.style.display = "none";
+            }
+        }
+
+        // Buy Products functionality
+        document.getElementById('buy-btn').addEventListener('click', () => {
+            if (isLoggedIn) {
+                openModal('buyProductsModal');
+                fetch('/api/products')
+                    .then(response => response.json())
+                    .then(products => {
+                        const productList = document.getElementById('productList');
+                        productList.innerHTML = products.map(product => `
+                            <div class="product-item">
+                                <h3>${product.name}</h3>
+                                <p>Farmer: ${product.farmer}</p>
+                                <p>Price: GYD ${product.price}</p>
+                                <button onclick="purchaseProduct(${product.id})">Buy</button>
+                            </div>
+                        `).join('');
+                    });
+            } else {
+                alert('Please log in to buy products.');
+            }
+        });
+
+        function purchaseProduct(productId) {
+            fetch(`/api/purchase/${productId}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert('Purchase successful!');
+                    } else {
+                        alert('Purchase failed: ' + result.message);
+                    }
+                });
+        }
+
+        // Market Trends functionality
+        document.getElementById('view-trends-btn').addEventListener('click', () => {
+            if (isLoggedIn) {
+                openModal('marketTrendsModal');
+                fetch('/api/market-trends')
+                    .then(response => response.json())
+                    .then(trends => {
+                        const trendsList = document.getElementById('trendsList');
+                        trendsList.innerHTML = trends.map(trend => `
+                            <div class="trend-item">
+                                <h3>${trend.product}</h3>
+                                <p>Status: ${trend.status}</p>
+                                <p>Price Change: ${trend.change}</p>
+                            </div>
+                        `).join('');
+                    });
+            } else {
+                alert('Please log in to view market trends.');
+            }
+        });
+
+        // AI Assistance functionality
+        document.getElementById('ai-assist-btn').addEventListener('click', () => {
+            if (isLoggedIn) {
+                openModal('aiAssistModal');
+            } else {
+                alert('Please log in to use AI assistance.');
+            }
+        });
+
+        document.getElementById('askAI').addEventListener('click', () => {
+            const question = document.getElementById('userQuestion').value;
+            fetch('/api/ai-assist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question: question })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('aiResponse').innerText = data.response;
+            });
+        });
+
+        // International Markets functionality
+        document.getElementById('international-markets-btn').addEventListener('click', () => {
+            if (isLoggedIn) {
+                openModal('internationalMarketsModal');
+                fetch('/api/international-markets')
+                    .then(response => response.json())
+                    .then(markets => {
+                        const marketsList = document.getElementById('marketsList');
+                        marketsList.innerHTML = markets.map(market => `
+                            <div class="market-item">
+                                <h3>${market.name}</h3>
+                                <p>Products: ${market.products.join(', ')}</p>
+                                <p>Exchange Rate: 1 GYD = ${market.exchangeRate.toFixed(4)} ${market.currency}</p>
+                                <button onclick="connectToMarket(${market.id})">Connect</button>
+                            </div>
+                        `).join('');
+                    });
+            } else {
+                alert('Please log in to access international markets.');
+            }
+        });
+
+        function connectToMarket(marketId) {
+            fetch(`/api/connect-market/${marketId}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert('Connected to international market successfully!');
+                    } else {
+                        alert('Connection failed: ' + result.message);
+                    }
+                });
+        }
+
+        // Close buttons for modals
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.onclick = function() {
+                this.parentElement.parentElement.style.display = "none";
+            }
+        });
+
+        document.getElementById('sell-btn').addEventListener('click', () => {
+            if (isLoggedIn) {
+                alert('Sell functionality to be implemented');
+            } else {
+                alert('Please log in to sell products.');
+            }
+        });
+
+        document.getElementById('profile-btn').addEventListener('click', () => {
+            if (currentUser) {
+                alert(`Profile for ${currentUser.username}\nUser Type: ${currentUser.userType}`);
+                // Here you would typically open a more detailed profile view
+            } else {
+                alert('Please log in to view your profile.');
+            }
+        });
+
+        function disableButtons() {
+            const buttons = ['buy-btn', 'sell-btn', 'view-trends-btn', 'international-markets-btn', 'ai-assist-btn', 'profile-btn'];
+            buttons.forEach(btn => {
+                document.getElementById(btn).disabled = true;
+            });
+        }
+    </script>
+
+    <!-- Add this just before the closing </body> tag -->
+
+    <!-- Buy Products Modal -->
+    <div id="buyProductsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Buy Products</h2>
+        <div id="productList"></div>
+      </div>
+    </div>
+
+    <!-- Sell Products Modal -->
+    <div id="sellProductsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Sell Products</h2>
+        <form id="sellProductForm">
+          <input type="text" id="productName" placeholder="Product Name" required>
+          <input type="number" id="productPrice" placeholder="Price (GYD)" required>
+          <input type="number" id="productQuantity" placeholder="Quantity" required>
+          <button type="submit">List Product</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Market Trends Modal -->
+    <div id="marketTrendsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Market Trends</h2>
+        <div id="trendsList"></div>
+      </div>
+    </div>
+
+    <!-- International Markets Modal -->
+    <div id="internationalMarketsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>International Markets</h2>
+        <div id="marketsList"></div>
+      </div>
+    </div>
+
+    <!-- AI Assistance Modal -->
+    <div id="aiAssistModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>AI Assistance</h2>
+        <textarea id="userQuestion" rows="4" placeholder="Ask your question here..."></textarea>
+        <button id="askAI">Ask AI</button>
+        <div id="aiResponse"></div>
+      </div>
+    </div>
+
+    <!-- Farmer Profile Modal -->
+    <div id="farmerProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Farmer Profile</h2>
+            <form id="sellProductForm">
+                <input type="text" id="productName" placeholder="Product Name" required>
+                <input type="number" id="productPrice" placeholder="Price (GYD)" required>
+                <input type="number" id="productQuantity" placeholder="Quantity" required>
+                <button type="submit">List Product</button>
+            </form>
+            <div id="listedProducts"></div>
+        </div>
+    </div>
+</body>
+</html>
